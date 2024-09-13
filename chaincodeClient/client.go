@@ -16,35 +16,63 @@ import (
 	"google.golang.org/grpc/credentials"
 )
 
+// Helper function to print JSON errors
+func printErrorAsJSON(code int, message string) {
+	errorJSON, _ := json.Marshal(map[string]interface{}{
+		"code":    code,
+		"message": message,
+	})
+	fmt.Println(string(errorJSON))
+}
+
 func GetPatient(contract *client.Contract, nin string) {
 	result, err := contract.EvaluateTransaction("ReadPatient", nin)
 	if err != nil {
-		log.Fatalf("Failed to evaluate transaction: %v", err)
+		printErrorAsJSON(1, fmt.Sprintf("Failed to evaluate transaction: %v", err))
+		return
 	}
 
 	var patient models.Patient
 	err = json.Unmarshal(result, &patient)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal patient data: %v", err)
+		printErrorAsJSON(2, fmt.Sprintf("Failed to unmarshal patient data: %v", err))
+		return
 	}
 
-	fmt.Printf("Patient Data: %+v\n", patient)
+	// Convert the patient struct to JSON in a single line
+	patientJSON, err := json.Marshal(patient)
+	if err != nil {
+		printErrorAsJSON(3, fmt.Sprintf("Failed to marshal patient data to JSON: %v", err))
+		return
+	}
+
+	// Print the JSON output in a single line
+	fmt.Println(string(patientJSON))
 }
+
 func GetAllPatients(contract *client.Contract) {
 	result, err := contract.EvaluateTransaction("GetAllPatients")
 	if err != nil {
-		log.Fatalf("Failed to evaluate transaction: %v", err)
+		printErrorAsJSON(1, fmt.Sprintf("Failed to evaluate transaction: %v", err))
+		return
 	}
 
 	var patients []models.Patient
 	err = json.Unmarshal(result, &patients)
 	if err != nil {
-		log.Fatalf("Failed to unmarshal patients data: %v", err)
+		printErrorAsJSON(2, fmt.Sprintf("Failed to unmarshal patients data: %v", err))
+		return
 	}
 
-	for _, patient := range patients {
-		fmt.Printf("Patient: %+v\n", patient)
+	// Convert the patients slice to JSON in a single line
+	patientsJSON, err := json.Marshal(patients)
+	if err != nil {
+		printErrorAsJSON(3, fmt.Sprintf("Failed to marshal patients data to JSON: %v", err))
+		return
 	}
+
+	// Print the JSON output in a single line
+	fmt.Println(string(patientsJSON))
 }
 func PublishPatient(contract *client.Contract, nin, firstName, lastName, dob, sex, motherNIN, fatherNIN, familyHistory, allergy, chronicIllnesses, amendedFrom string) {
 	_, err := contract.SubmitTransaction("CreatePatient", nin, firstName, lastName, dob, sex, motherNIN, fatherNIN, familyHistory, allergy, chronicIllnesses, amendedFrom)
