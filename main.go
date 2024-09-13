@@ -28,7 +28,7 @@ func main() {
 	familyHistory := flag.String("family-history", "None", "Family medical history (optional for 'publish').")
 	allergies := flag.String("allergies", "None", "Known allergies (optional for 'publish').")
 	chronicIllnesses := flag.String("chronic-illnesses", "None", "Chronic illnesses (optional for 'publish').")
-	bilans := flag.String("bilans", "", "Any medical bilans or summaries (optional for 'publish').")
+	bilans := flag.String("amended-from", "", "Who submitted the doc ?).")
 
 	// Parse the flags
 	flag.Parse()
