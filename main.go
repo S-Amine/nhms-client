@@ -37,7 +37,7 @@ func main() {
 	contract := network.GetContract("basic")
 
 	// Call functions
-	chaincodeclient.PublishPatient(contract, "111223333", "Alice", "Johnson", "1995-05-05", "F", "987654321", "123456789", "None", "None", "None", "")
-	chaincodeclient.GetPatient(contract, "111223333")
+	chaincodeclient.PublishPatient(contract, "5435", "Jhon", "Jam", "1995-05-05", "F", "987654321", "123456789", "None", "None", "None", "")
+	chaincodeclient.GetPatient(contract, "5435")
 	chaincodeclient.GetAllPatients(contract)
 }
